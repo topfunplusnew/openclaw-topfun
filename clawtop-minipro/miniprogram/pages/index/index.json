@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "chat-message": "../../components/chat-message/index",
+    "chat-input": "../../components/chat-input/index"
+  },
+  "navigationStyle": "custom",
+  "disableScroll": true
+}

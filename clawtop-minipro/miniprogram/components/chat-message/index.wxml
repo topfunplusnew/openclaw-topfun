@@ -1,0 +1,27 @@
+<view class="msg-row {{isUser ? 'is-user' : 'is-model'}}">
+  <view class="msg-body {{isUser ? 'is-user' : 'is-model'}}">
+    <!-- AI Avatar -->
+    <view wx:if="{{!isUser}}" class="msg-avatar">
+      <text class="avatar-label">AI</text>
+    </view>
+
+    <view class="msg-col">
+      <!-- Bubble -->
+      <view class="msg-bubble {{isUser ? 'bubble-user' : 'bubble-model'}}">
+        <!-- Image Attachments -->
+        <block wx:if="{{message.attachments && message.attachments.length > 0}}">
+          <block wx:for="{{message.attachments}}" wx:for-item="att" wx:key="index">
+            <image wx:if="{{att.type === 'image'}}" src="{{att.url}}" mode="widthFix" class="att-img"></image>
+            <view wx:else class="att-file">
+              <text>📄 {{att.name || '文件'}}</text>
+            </view>
+          </block>
+        </block>
+        <!-- Text -->
+        <text class="msg-text" user-select="true">{{message.text || (message.isStreaming ? '...' : '')}}</text>
+      </view>
+      <!-- Timestamp -->
+      <text class="msg-time {{isUser ? 'time-right' : 'time-left'}}">{{message.timestamp}}</text>
+    </view>
+  </view>
+</view>

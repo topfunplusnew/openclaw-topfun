@@ -179,6 +179,7 @@ export async function handleOpenAiHttpRequest(
   }
 
   if (req.method !== "POST") {
+    console.warn(`[openai-http] /v1/chat/completions 收到 method=${req.method}，仅接受 POST，返回 405`);
     sendMethodNotAllowed(res);
     return true;
   }

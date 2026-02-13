@@ -1,0 +1,43 @@
+<!-- Custom Header -->
+<view class="header">
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+  <view class="header-content">
+    <view class="header-inner">
+      <view class="online-dot"></view>
+      <text class="header-title">超级斜杠AI</text>
+    </view>
+  </view>
+</view>
+
+<!-- Chat Area -->
+<scroll-view 
+  class="chat-area" 
+  scroll-y 
+  scroll-into-view="{{scrollToView}}"
+  scroll-with-animation
+  style="top: {{headerHeight}}px;"
+>
+  <view class="msg-list">
+    <block wx:for="{{messages}}" wx:key="id">
+      <chat-message message="{{item}}" />
+    </block>
+    
+    <!-- Typing Indicator -->
+    <view wx:if="{{isTyping}}" class="typing-row">
+      <view class="typing-avatar">
+        <image src="/assets/robot.png" class="avatar-icon" mode="aspectFit" wx:if="{{false}}"/>
+        <text class="avatar-text">AI</text>
+      </view>
+      <view class="typing-bubble">
+        <view class="typing-dot"></view>
+        <view class="typing-dot delay1"></view>
+        <view class="typing-dot delay2"></view>
+      </view>
+    </view>
+    
+    <view id="bottom-anchor" style="height: 200rpx;"></view>
+  </view>
+</scroll-view>
+
+<!-- Chat Input -->
+<chat-input bind:send="onSendMessage" disabled="{{isTyping}}" />

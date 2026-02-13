@@ -1,0 +1,128 @@
+<view class="input-area">
+  <!-- Voice Confirm Panel -->
+  <view wx:if="{{showConfirmPanel}}" class="confirm-panel">
+    <view class="confirm-card">
+      <view class="confirm-header">
+        <view class="confirm-dot"></view>
+        <text class="confirm-label">语音识别</text>
+      </view>
+      <view class="confirm-body">
+        <view wx:if="{{isTranscribing}}" class="shimmer-lines">
+          <view class="shimmer-line"></view>
+          <view class="shimmer-line short"></view>
+        </view>
+        <text wx:else class="transcribed-text">"{{transcribedText || '未检测到内容'}}"</text>
+      </view>
+      <view class="confirm-actions">
+        <view class="btn-confirm {{isTranscribing || !transcribedText ? 'disabled' : ''}}" bindtap="confirmSend">
+          <text>✓ 确认发送</text>
+        </view>
+        <view class="btn-cancel" bindtap="cancelTranscription">
+          <text>取消</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Attachment Preview -->
+  <view wx:if="{{attachments.length > 0}}" class="att-row">
+    <block wx:for="{{attachments}}" wx:key="index">
+      <view class="att-thumb">
+        <image wx:if="{{item.type === 'image'}}" src="{{item.url}}" class="att-thumb-img" mode="aspectFill"></image>
+        <view wx:else class="att-thumb-file">📄</view>
+        <view class="att-remove" bindtap="removeAttachment" data-idx="{{index}}">✕</view>
+      </view>
+    </block>
+  </view>
+
+  <!-- Control Bar -->
+  <view class="control-bar">
+    <!-- Voice/Keyboard Toggle -->
+    <view class="circle-btn {{isVoiceMode ? 'active' : ''}}" bindtap="toggleVoice">
+      <text wx:if="{{isVoiceMode}}" class="btn-icon">⌨</text>
+      <text wx:else class="btn-icon">🎙</text>
+    </view>
+
+    <!-- Input / Voice Button -->
+    <view class="input-box">
+      <block wx:if="{{!isVoiceMode}}">
+        <input 
+          class="text-input"
+          value="{{inputValue}}"
+          bindinput="onInput"
+          bindconfirm="handleSend"
+          placeholder="说点什么吧..."
+          placeholder-class="placeholder-style"
+          confirm-type="send"
+          disabled="{{disabled}}"
+        />
+        <view 
+          class="send-circle {{(inputValue || attachments.length) ? 'active' : ''}}" 
+          bindtap="handleSend"
+        >
+          <text class="send-arrow">↑</text>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="voice-hold-area">
+          <!-- Recording wave animation -->
+          <view wx:if="{{isRecording}}" class="wave-container">
+            <view class="wave-ring"></view>
+            <view class="wave-ring delay"></view>
+          </view>
+          <button 
+            class="voice-hold-btn {{isRecording ? 'recording' : ''}}"
+            bindtouchstart="startRecording"
+            bindtouchend="stopRecording"
+          >
+            <block wx:if="{{isRecording}}">
+              <view class="voice-bars">
+                <view class="bar"></view>
+                <view class="bar mid"></view>
+                <view class="bar"></view>
+              </view>
+              <text>松开 结束</text>
+            </block>
+            <block wx:else>
+              <text class="mic-icon">🎤</text>
+              <text>按住 说话</text>
+            </block>
+          </button>
+        </view>
+      </block>
+    </view>
+
+    <!-- Plus / Menu Toggle -->
+    <view class="circle-btn {{isMenuOpen ? 'rotated' : ''}}" bindtap="toggleMenu">
+      <text class="btn-icon plus-icon">+</text>
+    </view>
+  </view>
+
+  <!-- Expanded Menu -->
+  <view wx:if="{{isMenuOpen && !isVoiceMode}}" class="menu-grid" style="animation: slideIn 0.25s ease-out;">
+    <view class="menu-cell" bindtap="chooseFromAlbum">
+      <view class="menu-circle">
+        <text class="menu-emoji">🖼</text>
+      </view>
+      <text class="menu-label">相册</text>
+    </view>
+    <view class="menu-cell" bindtap="chooseFile">
+      <view class="menu-circle">
+        <text class="menu-emoji">📂</text>
+      </view>
+      <text class="menu-label">文件</text>
+    </view>
+    <view class="menu-cell" bindtap="takePhoto">
+      <view class="menu-circle">
+        <text class="menu-emoji">📷</text>
+      </view>
+      <text class="menu-label">相机</text>
+    </view>
+    <view class="menu-cell" bindtap="getLocation">
+      <view class="menu-circle {{isLocating ? 'locating' : ''}}">
+        <text class="menu-emoji">📍</text>
+      </view>
+      <text class="menu-label">{{isLocating ? '获取中' : '位置'}}</text>
+    </view>
+  </view>
+</view>
