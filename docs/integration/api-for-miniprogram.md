@@ -328,3 +328,4 @@ location /openclaw/ {
 - [Webhooks](https://docs.openclaw.ai/automation/webhook)
 - [Gateway 配置](https://docs.openclaw.ai/gateway/configuration)
 - [Tailscale（公网/内网暴露）](https://docs.openclaw.ai/gateway/tailscale)
+- [小程序后端对接设计（Go）](/integration/minipro-backend-design)：自建 Go 后端的实现方案
